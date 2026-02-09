@@ -1,0 +1,34 @@
+name: Update ArXiv Papers
+
+on:
+  schedule:
+    # 每 4 小时运行一次 (UTC 时间)
+    - cron: '0 */4 * * *'
+  workflow_dispatch: # 允许你手动点击按钮运行
+
+permissions:
+  contents: write # 这一行非常重要，允许 Action 修改代码库
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
+
+    - name: Run script
+      run: python main.py
+
+    - name: Commit and push changes
+      run: |
+        git config --global user.name 'github-actions[bot]'
+        git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+        git add README.md
+        # 只有当有变动时才提交，否则会报错退出
+        git diff --quiet && git diff --staged --quiet || (git commit -m "📝 Update papers list [skip ci]" && git push)
