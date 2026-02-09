@@ -16,6 +16,21 @@ START_MARKER = ""
 END_MARKER = ""
 README_FILE = "README.md"
 # =======================================
+def check_logic_strictly(title):
+    """本地严格逻辑过滤"""
+    full_text = (title).lower() 
+    
+    if MUST_EXCLUDE in full_text:
+        return False
+    
+    if MUST_INCLUDE not in full_text:
+        return False
+        
+    has_domain = any(term in full_text for term in ANY_INCLUDE)
+    if not has_domain:
+        return False
+        
+    return True
 
 def fetch_arxiv_papers():
     """获取符合逻辑的最新论文"""
@@ -51,8 +66,7 @@ def fetch_arxiv_papers():
             link = paper_id
             
             # 本地严格过滤：排除 VLA
-            full_text = (raw_title + " " + summary).lower()
-            if MUST_EXCLUDE in full_text:
+            if not check_logic_strictly(raw_title):
                 continue
                 
             papers.append({
