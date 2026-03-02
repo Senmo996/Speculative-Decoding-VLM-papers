@@ -12,8 +12,8 @@ ANY_INCLUDE = ["multimodal", "vision-language", "vlm"]
 MUST_EXCLUDE = "vision-language-action"
 
 # 标记：README中内容的起始和结束位置
-START_MARKER = ""
-END_MARKER = ""
+START_MARKER = "<!-- PAPERS_START -->"
+END_MARKER = "<!-- PAPERS_END -->"
 README_FILE = "README.md"
 # =======================================
 def check_logic_strictly(title):

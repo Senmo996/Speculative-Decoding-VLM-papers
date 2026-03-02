@@ -2,8 +2,8 @@ name: Update ArXiv Papers
 
 on:
   schedule:
-    # 每 4 小时运行一次 (UTC 时间)
-    - cron: '0 */4 * * *'
+    # 每两天运行一次 (UTC 时间 0点)
+    - cron: '0 0 */2 * *'
   workflow_dispatch: # 允许你手动点击按钮运行
 
 permissions:
