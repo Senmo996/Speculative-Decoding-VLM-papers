@@ -14,6 +14,7 @@
 <!-- PAPERS_START -->
 | Date | Title |
 |:---:|:---|
+| 2026-03-16 | [MMSpec: Benchmarking Speculative Decoding for Vision-Language Models](http://arxiv.org/abs/2603.14989v1) |
 | 2026-02-13 | [Training-Free Acceleration for Document Parsing Vision-Language Model with Hierarchical Speculative Decoding](http://arxiv.org/abs/2602.12957v1) |
 | 2026-01-31 | [SAGE: Accelerating Vision-Language Models via Entropy-Guided Adaptive Speculative Decoding](http://arxiv.org/abs/2602.00523v1) |
 | 2026-01-28 | [TABED: Test-Time Adaptive Ensemble Drafting for Robust Speculative Decoding in LVLMs](http://arxiv.org/abs/2601.20357v1) |
