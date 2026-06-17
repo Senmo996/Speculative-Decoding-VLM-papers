@@ -5,7 +5,7 @@
 ![Domain](https://img.shields.io/badge/Domain-Multimodal%20%2F%20VLM-orange?style=flat-square)
 
 > 🤖 **About:** This repository automatically tracks the latest ArXiv papers on **Speculative Decoding** applied to **Multimodal/VLMs**, excluding VLA (Action) papers.
-> Updates every 4 hours.
+> Updates every 2 days.
 
 ---
 

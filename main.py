@@ -1,77 +1,76 @@
 import urllib.request
 import urllib.parse
 import xml.etree.ElementTree as ET
-import datetime
 import re
 import os
 
-# ================= 配置 =================
-# 关键词逻辑
+# Search and filtering configuration.
 MUST_INCLUDE = "speculative decoding"
 ANY_INCLUDE = ["multimodal", "vision-language", "vlm"]
-MUST_EXCLUDE = "vision-language-action"
+DOMAIN_PATTERNS = [
+    r"\bmultimodal\b",
+    r"\bvision[-\s]+language\b",
+    r"\bl?vlms?\b",
+]
+EXCLUDE_PATTERNS = [
+    r"\bvla\b",
+    r"\bvision[-\s]+language[-\s]+action\b",
+]
 
-# 标记：README中内容的起始和结束位置
 START_MARKER = "<!-- PAPERS_START -->"
 END_MARKER = "<!-- PAPERS_END -->"
 README_FILE = "README.md"
-# =======================================
-def check_logic_strictly(title):
-    """本地严格逻辑过滤"""
-    full_text = (title).lower() 
-    
-    if MUST_EXCLUDE in full_text:
+
+def check_logic_strictly(title, summary=""):
+    """Return True when a paper matches the repository topic."""
+    full_text = title.lower()
+
+    if any(re.search(pattern, full_text) for pattern in EXCLUDE_PATTERNS):
         return False
-    
+
     if MUST_INCLUDE not in full_text:
         return False
-        
-    has_domain = any(term in full_text for term in ANY_INCLUDE)
-    if not has_domain:
-        return False
-        
-    return True
+
+    return any(re.search(pattern, full_text) for pattern in DOMAIN_PATTERNS)
+
 
 def fetch_arxiv_papers():
-    """获取符合逻辑的最新论文"""
+    """Fetch the latest arXiv papers that match the configured topic."""
     base_url = 'http://export.arxiv.org/api/query?'
-    
-    # 构造查询：all:"speculative decoding" AND (all:multimodal OR ...)
+
     term_core = f'all:"{MUST_INCLUDE}"'
     domain_query = " OR ".join([f'all:"{term}"' if " " in term else f'all:{term}' for term in ANY_INCLUDE])
     final_query = f'{term_core} AND ({domain_query})'
-    
+
     params = {
         'search_query': final_query,
         'start': 0,
-        'max_results': 50,  # 抓取更多以防遗漏
+        'max_results': 50,
         'sortBy': 'submittedDate',
         'sortOrder': 'descending'
     }
-    
+
     url = base_url + urllib.parse.urlencode(params)
-    
+
     try:
         response = urllib.request.urlopen(url, timeout=30)
         root = ET.fromstring(response.read())
         namespace = {'atom': 'http://www.w3.org/2005/Atom'}
-        
+
         papers = []
         for entry in root.findall('atom:entry', namespace):
-            # 获取原始信息
             raw_title = entry.find('atom:title', namespace).text.replace('\n', ' ').strip()
             summary = entry.find('atom:summary', namespace).text.replace('\n', ' ').strip().lower()
             paper_id = entry.find('atom:id', namespace).text
-            published = entry.find('atom:published', namespace).text[:10] # 取 YYYY-MM-DD
+            published = entry.find('atom:published', namespace).text[:10]
             link = paper_id
-            
-            # 本地严格过滤：排除 VLA
+
             if not check_logic_strictly(raw_title):
                 continue
-                
+
             papers.append({
                 'date': published,
-                'title': raw_title.replace('|', '-'), # 防止破坏Markdown表格
+                'title': raw_title.replace('|', '-'),
                 'link': link,
                 'id': paper_id
             })
@@ -80,8 +79,28 @@ def fetch_arxiv_papers():
         print(f"Error fetching arXiv: {e}")
         return []
 
+
+def arxiv_base_id(arxiv_id):
+    """Return an arXiv ID without the version suffix."""
+    return arxiv_id.split('/')[-1].split('v')[0]
+
+
+def build_papers_block(existing_content, new_rows):
+    """Insert new paper rows after the Markdown table separator."""
+    lines = existing_content.strip('\n').splitlines()
+    has_header = any("| Date | Title |" in line for line in lines)
+    separator_index = next((i for i, line in enumerate(lines) if "|:---" in line), None)
+
+    if not has_header or separator_index is None:
+        lines = ["| Date | Title |", "|:---:|:---|"]
+        separator_index = 1
+
+    updated_lines = lines[:separator_index + 1] + new_rows + lines[separator_index + 1:]
+    return "\n" + "\n".join(updated_lines) + "\n"
+
+
 def update_readme():
-    """更新 README.md 文件"""
+    """Update README.md with newly discovered papers."""
     if not os.path.exists(README_FILE):
         print("README.md not found!")
         return
@@ -89,22 +108,19 @@ def update_readme():
     with open(README_FILE, 'r', encoding='utf-8') as f:
         content = f.read()
 
-    # 1. 提取旧内容（防止重复）
-    # 使用正则找到 START 和 END 之间的内容
     pattern = re.compile(f'{re.escape(START_MARKER)}(.*?){re.escape(END_MARKER)}', re.DOTALL)
     match = pattern.search(content)
-    
-    existing_ids = set()
-    if match:
-        existing_content = match.group(1)
-        # 从现有的 markdown 链接中提取 ID
-        # 假设格式是 [Title](http://arxiv.org/abs/xxxx.xxxx)
-        links = re.findall(r'\(http://arxiv.org/abs/([\d.]+)[v\d]*\)', existing_content)
-        existing_ids.update(links)
+    if not match:
+        print(f"README markers not found: {START_MARKER} and {END_MARKER}")
+        return
 
-    # 2. 获取新论文
+    existing_content = match.group(1)
+    existing_ids = set()
+    links = re.findall(r'\(https?://arxiv.org/abs/([\d.]+)[v\d]*\)', existing_content)
+    existing_ids.update(links)
+
     new_papers = fetch_arxiv_papers()
-    unique_new_papers = [p for p in new_papers if p['id'].split('/')[-1].split('v')[0] not in existing_ids]
+    unique_new_papers = [p for p in new_papers if arxiv_base_id(p['id']) not in existing_ids]
 
     if not unique_new_papers:
         print("No new papers found.")
@@ -112,65 +128,16 @@ def update_readme():
 
     print(f"Found {len(unique_new_papers)} new papers!")
 
-    # 3. 生成新的表格行
     new_rows = []
     for p in unique_new_papers:
-        # 格式: | YYYY-MM-DD | [Title](Link) |
         row = f"| {p['date']} | [{p['title']}]({p['link']}) |"
         new_rows.append(row)
 
-    # 4. 组合内容：新行 + 旧内容 (去掉旧的表头，如果存在)
-    # 简单的策略：我们重新生成整个表格块
-    
-    # 重新解析所有论文（为了统一排序）
-    # 这里我们简化逻辑：把新论文插入到 START_MARKER 后面，保留旧的
-    # 但为了保证顺序完美，我们最好是将新行加在旧行上面
-    
-    insert_content = "\n".join(new_rows) + "\n"
-    
-    # 如果原本中间没有内容（第一次运行），需要加表头
-    if "| Date | Title |" not in match.group(1):
-        header = "| Date | Title |\n|:---:|:---|\n"
-        insert_content = header + insert_content
-    
-    # 替换内容
-    # 注意：这里是将新行插入到旧行之前（在表格的第一行数据位置）
-    # 但由于正则替换比较复杂，我们采用更简单的方法：
-    # 将旧内容按行读取，找到表头后的第一行，插入新内容
-    
-    lines = content.split('\n')
-    new_lines = []
-    inside_block = False
-    header_found = False
-    
-    for line in lines:
-        if line.strip() == START_MARKER:
-            new_lines.append(line)
-            inside_block = True
-            # 如果是空文件或第一次，加入表头
-            if "| Date | Title |" not in content:
-                new_lines.append("| Date | Title |")
-                new_lines.append("|:---:|:---|")
-                new_lines.extend(new_rows)
-            continue
-        
-        if line.strip() == END_MARKER:
-            inside_block = False
-            new_lines.append(line)
-            continue
-
-        if inside_block:
-            if "|:---" in line: # 表格分割线
-                new_lines.append(line)
-                new_lines.extend(new_rows) # 在分割线后立即插入新行
-                header_found = True
-            else:
-                new_lines.append(line)
-        else:
-            new_lines.append(line)
+    updated_block = build_papers_block(existing_content, new_rows)
+    updated_content = content[:match.start(1)] + updated_block + content[match.end(1):]
 
     with open(README_FILE, 'w', encoding='utf-8') as f:
-        f.write("\n".join(new_lines))
+        f.write(updated_content)
 
 if __name__ == "__main__":
     update_readme()
