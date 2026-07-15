@@ -14,6 +14,7 @@
 <!-- PAPERS_START -->
 | Date | Title |
 |:---:|:---|
+| 2026-07-13 | [TIGER: Text-Conditioned Visual Gated Routing with Acceptance Alignment for Multimodal Speculative Decoding](http://arxiv.org/abs/2607.11131v1) |
 | 2026-05-30 | [DREAM-S: Speculative Decoding with Searchable Drafting and Target-Aware Refinement for Multimodal Generation](http://arxiv.org/abs/2606.00535v1) |
 | 2026-05-04 | [CoVSpec: Efficient Device-Edge Co-Inference for Vision-Language Models via Speculative Decoding](http://arxiv.org/abs/2605.02218v1) |
 | 2026-03-16 | [MMSpec: Benchmarking Speculative Decoding for Vision-Language Models](http://arxiv.org/abs/2603.14989v1) |
