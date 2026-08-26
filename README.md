@@ -16,8 +16,10 @@
 |:---:|:---|
 | 2026-08-21 | [Is Multimodal Speculative Decoding Ready for Diffusion-Based Parallel Drafting? A Survey and Empirical Diagnosis](http://arxiv.org/abs/2608.20743v1) |
 | 2026-07-13 | [TIGER: Text-Conditioned Visual Gated Routing with Acceptance Alignment for Multimodal Speculative Decoding](http://arxiv.org/abs/2607.11131v1) |
+| 2026-07-07 | [Nemotron-Labs-Diffusion: A Tri-Mode Language Model Unifying Autoregressive, Diffusion, and Self-Speculation Decoding](http://arxiv.org/abs/2607.05722v1) |
 | 2026-05-30 | [DREAM-S: Speculative Decoding with Searchable Drafting and Target-Aware Refinement for Multimodal Generation](http://arxiv.org/abs/2606.00535v1) |
 | 2026-05-04 | [CoVSpec: Efficient Device-Edge Co-Inference for Vision-Language Models via Speculative Decoding](http://arxiv.org/abs/2605.02218v1) |
+| 2026-04-08 | [Fast-dVLM: Efficient Block-Diffusion VLM via Direct Conversion from Autoregressive VLM](http://arxiv.org/abs/2604.06832v2) |
 | 2026-03-16 | [MMSpec: Benchmarking Speculative Decoding for Vision-Language Models](http://arxiv.org/abs/2603.14989v1) |
 | 2026-02-13 | [Training-Free Acceleration for Document Parsing Vision-Language Model with Hierarchical Speculative Decoding](http://arxiv.org/abs/2602.12957v1) |
 | 2026-01-31 | [SAGE: Accelerating Vision-Language Models via Entropy-Guided Adaptive Speculative Decoding](http://arxiv.org/abs/2602.00523v1) |
