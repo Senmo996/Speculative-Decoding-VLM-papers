@@ -14,6 +14,7 @@
 <!-- PAPERS_START -->
 | Date | Title |
 |:---:|:---|
+| 2026-08-24 | [FOVEA: Focused On-Demand Visual Evidence Adaptation for Cache-Friendly Multimodal Speculative Decoding](http://arxiv.org/abs/2608.22883v1) |
 | 2026-08-21 | [Is Multimodal Speculative Decoding Ready for Diffusion-Based Parallel Drafting? A Survey and Empirical Diagnosis](http://arxiv.org/abs/2608.20743v1) |
 | 2026-07-13 | [TIGER: Text-Conditioned Visual Gated Routing with Acceptance Alignment for Multimodal Speculative Decoding](http://arxiv.org/abs/2607.11131v1) |
 | 2026-07-07 | [Nemotron-Labs-Diffusion: A Tri-Mode Language Model Unifying Autoregressive, Diffusion, and Self-Speculation Decoding](http://arxiv.org/abs/2607.05722v1) |
