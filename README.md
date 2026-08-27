@@ -2,14 +2,14 @@
 
 ![Update Status](https://img.shields.io/badge/Auto--Update-Running-brightgreen?style=flat-square&logo=github-actions)
 ![Topic](https://img.shields.io/badge/Topic-Speculative_Decoding-blue?style=flat-square)
-![Domain](https://img.shields.io/badge/Domain-Multimodal%20%2F%20VLM-orange?style=flat-square)
+![Domain](https://img.shields.io/badge/Domain-Multimodal%20%2F%20VLM%20%2F%20Video--LLM-orange?style=flat-square)
 
-> 🤖 **About:** This repository automatically tracks the latest ArXiv papers on **Speculative Decoding** applied to **Multimodal/VLMs**, excluding VLA (Action) papers.
+> 🤖 **About:** This repository automatically tracks the latest ArXiv papers on **Speculative Decoding** applied to **Multimodal/VLMs**, including **Video LLMs**, while excluding VLA (Action) papers.
 > Updates every 2 days.
 
 ---
 
-### 📝 Latest Papers
+### 📝 Latest Multimodal/VLM Papers
 
 <!-- PAPERS_START -->
 | Date | Title |
@@ -35,3 +35,15 @@
 | 2025-05-15 | [MASSV: Multimodal Adaptation and Self-Data Distillation for Speculative Decoding of Vision-Language Models](http://arxiv.org/abs/2505.10526v2) |
 | 2024-04-13 | [On Speculative Decoding for Multimodal Large Language Models](http://arxiv.org/abs/2404.08856v1) |
 <!-- PAPERS_END -->
+
+### 🎬 Video LLM Speculative Decoding Papers
+
+<!-- VIDEO_PAPERS_START -->
+| Date | Title |
+|:---:|:---|
+| 2026-04-07 | [See the Forest for the Trees: Loosely Speculative Decoding via Visual-Semantic Guidance for Efficient Inference of Video LLMs](http://arxiv.org/abs/2604.05650v2) |
+| 2026-03-20 | [ParallelVLM: Lossless Video-LLM Acceleration with Visual Alignment Aware Parallel Speculative Decoding](http://arxiv.org/abs/2603.19610v2) |
+| 2026-02-17 | [Sparrow: Text-Anchored Window Attention with Visual-Semantic Glimpsing for Speculative Decoding in Video LLMs](http://arxiv.org/abs/2602.15318v1) |
+| 2026-01-13 | [HIPPO: Accelerating Video Large Language Models Inference via Holistic-aware Parallel Speculative Decoding](http://arxiv.org/abs/2601.08273v1) |
+| 2025-08-22 | [SpecVLM: Enhancing Speculative Decoding of Video LLMs via Verifier-Guided Token Pruning](http://arxiv.org/abs/2508.16201v2) |
+<!-- VIDEO_PAPERS_END -->
